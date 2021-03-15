@@ -33,6 +33,7 @@ class _HomeState extends State<HomeScreen> {
   _HomeState(this.user);
   PageController pageController;
   int pageIndex = 0;
+  bool isSearchBar = false;
   @override
   void initState() {
     super.initState();
@@ -41,6 +42,7 @@ class _HomeState extends State<HomeScreen> {
 
   onPageChanged(int pageIndex) {
     setState(() {
+      isSearchBar = pageIndex == 2 ? true : false;
       this.pageIndex = pageIndex;
     });
   }
@@ -70,6 +72,7 @@ class _HomeState extends State<HomeScreen> {
       backgroundColor: AppThemes.lightTheme.backgroundColor,
       appBar: CustomHeader(
         user: user,
+        isSearchBar: isSearchBar,
         isAppTitle: true,
         signOutCallBack: () {
           logout();
