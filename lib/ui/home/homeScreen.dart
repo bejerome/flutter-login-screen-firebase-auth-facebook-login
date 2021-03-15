@@ -1,15 +1,20 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login_screen/constants.dart';
+import 'package:flutter_login_screen/constants/app_themes.dart';
 import 'package:flutter_login_screen/main.dart';
 import 'package:flutter_login_screen/model/user.dart';
 import 'package:flutter_login_screen/services/authenticate.dart';
 import 'package:flutter_login_screen/services/helper.dart';
 import 'package:flutter_login_screen/ui/auth/authScreen.dart';
+import 'package:flutter_login_screen/ui/screens/activity_feed.dart';
+import 'package:flutter_login_screen/ui/screens/profile.dart';
+import 'package:flutter_login_screen/ui/screens/search.dart';
+import 'package:flutter_login_screen/ui/screens/timeline.dart';
+import 'package:flutter_login_screen/ui/screens/upload.dart';
+import 'package:flutter_login_screen/ui/widgets/header.dart';
+import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -24,79 +29,95 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeState extends State<HomeScreen> {
   final User user;
-
+  GlobalKey bottomNavigationKey = GlobalKey();
   _HomeState(this.user);
+  PageController pageController;
+  int pageIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+  }
+
+  onPageChanged(int pageIndex) {
+    setState(() {
+      this.pageIndex = pageIndex;
+    });
+  }
+
+  onTap(int pageIndex) {
+    if (pageController.hasClients) {
+      pageController.animateToPage(
+        pageIndex,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  void logout() async {
+    user.active = false;
+    user.lastOnlineTimestamp = Timestamp.now();
+    FireStoreUtils.updateCurrentUser(user);
+    await auth.FirebaseAuth.instance.signOut();
+    MyAppState.currentUser = null;
+    pushAndRemoveUntil(context, AuthScreen(), false);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Text(
-                'Drawer Header',
-                style: TextStyle(color: Colors.white),
-              ),
-              decoration: BoxDecoration(
-                color: Color(COLOR_PRIMARY),
-              ),
-            ),
-            ListTile(
-              title: Text(
-                'Logout',
-                style: TextStyle(color: Colors.black),
-              ),
-              leading: Transform.rotate(
-                angle: pi/1,
-                  child: Icon(Icons.exit_to_app, color: Colors.black)),
-              onTap: () async {
-                user.active = false;
-                user.lastOnlineTimestamp = Timestamp.now();
-                FireStoreUtils.updateCurrentUser(user);
-                await auth.FirebaseAuth.instance.signOut();
-                MyAppState.currentUser = null;
-                pushAndRemoveUntil(context, AuthScreen(), false);
-              },
-            ),
-          ],
-        ),
-      ),
-      appBar: AppBar(
-        title: Text(
-          'Home',
-          style: TextStyle(color: Colors.black),
-        ),
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
-        centerTitle: true,
+      backgroundColor: AppThemes.lightTheme.backgroundColor,
+      appBar: CustomHeader(
+        user: user,
+        isAppTitle: true,
+        signOutCallBack: () {
+          logout();
+        },
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            displayCircleImage(user.profilePictureURL, 125, false),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(user.firstName),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(user.email),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(user.phoneNumber),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(user.userID),
-            ),
-          ],
-        ),
+          child: PageView(
+        children: [
+          Timeline(),
+          ActivityFeed(),
+          Search(),
+          Profile(
+            user: user,
+          ),
+        ],
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        physics: NeverScrollableScrollPhysics(),
+      )),
+      bottomNavigationBar: FancyBottomNavigation(
+        circleColor: Colors.red,
+        activeIconColor: Colors.white,
+        inactiveIconColor: Colors.grey,
+        textColor: Colors.red,
+        barBackgroundColor: Colors.white,
+        tabs: [
+          TabData(
+              iconData: Icons.home,
+              title: "Home",
+              onclick: () {
+                final FancyBottomNavigationState fState =
+                    bottomNavigationKey.currentState;
+                fState.setPage(2);
+              }),
+          TabData(
+              iconData: Icons.feedback,
+              title: "Activity",
+              onclick: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Search()))),
+          TabData(iconData: Icons.search, title: "Users"),
+          TabData(iconData: Icons.person, title: "Profile"),
+        ],
+        initialSelection: 0,
+        key: bottomNavigationKey,
+        onTabChangedListener: (position) {
+          onPageChanged(position);
+          onTap(position);
+        },
       ),
     );
   }
