@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "215409421193",
+    "firebase_url": "https://fluttertemplate-c497e-default-rtdb.firebaseio.com",
+    "project_id": "fluttertemplate-c497e",
+    "storage_bucket": "fluttertemplate-c497e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:215409421193:android:e5d3e344284a9b57608f58",
+        "android_client_info": {
+          "package_name": "com.creolben.template"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "215409421193-dtbiiggi5ol5ktlrcpljqckrf5tq4odp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPb1hB-oGiRcvJMfHXninKFIHGWVYE_ss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "215409421193-dtbiiggi5ol5ktlrcpljqckrf5tq4odp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "215409421193-2m7i9628ijrvqte70pf258a0bcqgn32h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.creolben.template"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

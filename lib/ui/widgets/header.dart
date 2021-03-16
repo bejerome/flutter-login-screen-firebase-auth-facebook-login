@@ -115,6 +115,7 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
               },
               child: Container(
                 padding: EdgeInsets.only(top: 10),
+                height: MediaQuery.of(context).size.height,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -201,45 +202,44 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: 50,
+                      height: 30,
                     ),
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Column(
-                          children: [
-                            MenuText(
-                              title: "Home",
-                              icon: Icons.home,
-                              menuTextCallBack: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            MenuText(
-                              title: "Profile",
-                              icon: Icons.person,
-                              menuTextCallBack: () {
-                                print("Profile");
-                              },
-                            ),
-                            MenuText(
-                              title: "Settings",
-                              icon: Icons.settings,
-                              menuTextCallBack: () {
-                                print("Settings");
-                              },
-                            ),
-                            MenuText(
-                              title: 'Logout',
-                              icon: Icons.logout,
-                              menuTextCallBack: () {
-                                signOutCallBack();
-                              },
-                            ),
-                          ],
-                        ),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: Column(
+                        children: [
+                          MenuText(
+                            title: "Home",
+                            icon: Icons.home,
+                            menuTextCallBack: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          MenuText(
+                            title: "Profile",
+                            icon: Icons.person,
+                            menuTextCallBack: () {
+                              print("Profile");
+                            },
+                          ),
+                          MenuText(
+                            title: "Settings",
+                            icon: Icons.settings,
+                            menuTextCallBack: () {
+                              print("Settings");
+                            },
+                          ),
+                          MenuText(
+                            title: 'Logout',
+                            icon: Icons.logout,
+                            menuTextCallBack: () {
+                              signOutCallBack();
+                            },
+                          ),
+                        ],
                       ),
                     ),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
