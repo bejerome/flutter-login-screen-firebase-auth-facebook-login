@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "flutter-login-screen-firebase-auth-facebook-login",
+            "name": "flutter_dev",
             "request": "launch",
             "type": "dart"
         }

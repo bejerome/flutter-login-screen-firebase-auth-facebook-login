@@ -12,8 +12,15 @@ import 'package:flutter_login_screen/ui/auth/authScreen.dart';
 import 'package:flutter_login_screen/ui/home/homeScreen.dart';
 import 'package:flutter_login_screen/ui/onBoarding/onBoardingScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:universal_platform/universal_platform.dart';
 
-void main() => runApp(new MyApp());
+bool isIos = UniversalPlatform.isIOS;
+bool isWeb = UniversalPlatform.isWeb;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(new MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
