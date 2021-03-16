@@ -12,7 +12,6 @@ import 'package:flutter_login_screen/ui/screens/activity_feed.dart';
 import 'package:flutter_login_screen/ui/screens/profile.dart';
 import 'package:flutter_login_screen/ui/screens/search.dart';
 import 'package:flutter_login_screen/ui/screens/timeline.dart';
-import 'package:flutter_login_screen/ui/screens/upload.dart';
 import 'package:flutter_login_screen/ui/widgets/header.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 

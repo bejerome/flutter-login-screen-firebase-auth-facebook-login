@@ -23,7 +23,7 @@ class AuthScreen extends StatelessWidget {
             padding:
                 const EdgeInsets.only(left: 16, top: 32, right: 16, bottom: 8),
             child: Text(
-              'Say Hello To Your New App!',
+              'New App!',
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Color(COLOR_PRIMARY),
@@ -32,30 +32,24 @@ class AuthScreen extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-            child: Text(
-              'You\'ve just saved a week of development and headaches.',
-              style: TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Padding(
             padding: const EdgeInsets.only(right: 40.0, left: 40.0, top: 40),
             child: ConstrainedBox(
               constraints: const BoxConstraints(minWidth: double.infinity),
-              child: RaisedButton(
-                color: Color(COLOR_PRIMARY),
+              child: ElevatedButton(
+                style: ButtonStyle(),
+                // color: Color(COLOR_PRIMARY),
+                // textColor: Colors.white,
+                // splashColor: Color(COLOR_PRIMARY),
+                // padding: EdgeInsets.only(top: 12, bottom: 12),
+                // shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(25.0),
+                //     side: BorderSide(color: Color(COLOR_PRIMARY))),
                 child: Text(
                   'Log In',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                textColor: Colors.white,
-                splashColor: Color(COLOR_PRIMARY),
+
                 onPressed: () => push(context, new LoginScreen()),
-                padding: EdgeInsets.only(top: 12, bottom: 12),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    side: BorderSide(color: Color(COLOR_PRIMARY))),
               ),
             ),
           ),

@@ -19,6 +19,15 @@ class FireStoreUtils {
     }
   }
 
+  Future<QuerySnapshot> getUsers() async {
+    QuerySnapshot users = await firestore.collection(USERS).get();
+    if (users != null) {
+      return users;
+    } else {
+      return null;
+    }
+  }
+
   static Future<User> updateCurrentUser(User user) async {
     return await firestore
         .collection(USERS)
