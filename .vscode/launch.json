@@ -8,6 +8,16 @@
             "name": "flutter_dev",
             "request": "launch",
             "type": "dart"
-        }
+        },
+        {
+            "name": "web",
+            "program": "lib/main.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--web-port=5000",
+                "--web-enable-expression-evaluation"
+            ],
+        },
     ]
 }

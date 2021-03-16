@@ -228,7 +228,8 @@ class _LoginScreen extends State<LoginScreen> {
   Future<User> loginWithUserNameAndPassword() async {
     bool isIos = UniversalPlatform.isIOS;
     bool isWeb = UniversalPlatform.isWeb;
-    auth.FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password)
+    auth.FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
     try {
       auth.UserCredential result = await auth.FirebaseAuth.instance
           .signInWithEmailAndPassword(
