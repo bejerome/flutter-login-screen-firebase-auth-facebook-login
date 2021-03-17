@@ -45,7 +45,7 @@ class _LoginScreen extends State<LoginScreen> {
           children: <Widget>[
             Padding(
               padding:
-                  const EdgeInsets.only(top: 32.0, right: 16.0, left: 16.0),
+                  const EdgeInsets.only(top: 50.0, right: 16.0, left: 16.0),
               child: Text(
                 'Sign In',
                 style: TextStyle(
@@ -100,7 +100,9 @@ class _LoginScreen extends State<LoginScreen> {
                     },
                     obscureText: true,
                     textInputAction: TextInputAction.done,
-                    style: TextStyle(fontSize: 18.0),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
                     cursorColor: Color(COLOR_PRIMARY),
                     decoration: InputDecoration(
                         contentPadding:
@@ -120,88 +122,25 @@ class _LoginScreen extends State<LoginScreen> {
               padding: const EdgeInsets.only(right: 40.0, left: 40.0, top: 40),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(minWidth: double.infinity),
-                child: RaisedButton(
-                  color: Color(COLOR_PRIMARY),
+                child: ElevatedButton(
                   child: Text(
                     'Log In',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Signatra"),
                   ),
-                  textColor: Colors.white,
-                  splashColor: Color(COLOR_PRIMARY),
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.purple),
+                      elevation: MaterialStateProperty.all<double>(10.0),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ))),
                   onPressed: () async {
                     await login();
                   },
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                      side: BorderSide(color: Color(COLOR_PRIMARY))),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Center(
-                child: Text(
-                  'OR',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.only(right: 40.0, left: 40.0, bottom: 20),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(minWidth: double.infinity),
-                child: RaisedButton.icon(
-                  label: Text(
-                    'Facebook Login',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  icon: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Image.asset(
-                      'assets/images/facebook_logo.png',
-                      color: Colors.white,
-                      height: 30,
-                      width: 30,
-                    ),
-                  ),
-                  color: Color(FACEBOOK_BUTTON_COLOR),
-                  textColor: Colors.white,
-                  splashColor: Color(FACEBOOK_BUTTON_COLOR),
-                  onPressed: () async {
-                    final facebookLogin = FacebookLogin();
-                    final result = await facebookLogin.logIn(['email']);
-                    switch (result.status) {
-                      case FacebookLoginStatus.loggedIn:
-                        showProgress(
-                            context, 'Logging in, please wait...', false);
-                        await auth.FirebaseAuth.instance
-                            .signInWithCredential(
-                                auth.FacebookAuthProvider.credential(
-                                    result.accessToken.token))
-                            .then((auth.UserCredential authResult) async {
-                          User user = await _fireStoreUtils
-                              .getCurrentUser(authResult.user.uid);
-                          if (user == null) {
-                            _createUserFromFacebookLogin(
-                                result, authResult.user.uid);
-                          } else {
-                            _syncUserDataWithFacebookData(result, user);
-                          }
-                        });
-                        break;
-                      case FacebookLoginStatus.cancelledByUser:
-                        break;
-                      case FacebookLoginStatus.error:
-                        showAlertDialog(
-                            context, 'Error', 'Couldn\'t login via facebook.');
-                        break;
-                    }
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                      side: BorderSide(color: Color(FACEBOOK_BUTTON_COLOR))),
                 ),
               ),
             ),
@@ -226,8 +165,8 @@ class _LoginScreen extends State<LoginScreen> {
   }
 
   Future<User> loginWithUserNameAndPassword() async {
-    bool isIos = UniversalPlatform.isIOS;
-    bool isWeb = UniversalPlatform.isWeb;
+    // bool isIos = UniversalPlatform.isIOS;
+    // bool isWeb = UniversalPlatform.isWeb;
     auth.FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);
     try {
