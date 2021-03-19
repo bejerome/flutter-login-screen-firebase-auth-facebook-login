@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login_screen/constants/app_themes.dart';
+import 'package:flutter_login_screen/ui/widgets/custom_site_card.dart';
 
 // FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -21,14 +22,26 @@ class _TimelineState extends State<Timeline> {
   @override
   Widget build(context) {
     return Scaffold(
-      backgroundColor: AppThemes.lightTheme.backgroundColor,
-      body: Center(
-          child: Container(
-              child: Text(
-        "Timeline",
-        style:
-            TextStyle(fontSize: 30, fontFamily: "Signatra", color: Colors.red),
-      ))),
-    );
+        backgroundColor: AppThemes.lightTheme.backgroundColor,
+        body: SingleChildScrollView(
+            child: Column(
+          children: [
+            CustomSiteCard(
+              title: "Harold Parker Forest",
+              subTitle: "Site# 45",
+              imagePath: "assets/images/campsite1.jpeg",
+            ),
+            CustomSiteCard(
+              title: "Camp Denession",
+              subTitle: "Site# 15",
+              imagePath: "assets/images/campsite2.jpeg",
+            ),
+            CustomSiteCard(
+              title: "Wompatuck State Park",
+              subTitle: "Site# 15",
+              imagePath: "assets/images/campsite2.jpeg",
+            ),
+          ],
+        )));
   }
 }

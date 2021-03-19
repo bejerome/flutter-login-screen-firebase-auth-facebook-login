@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/constants/app_themes.dart';
 import 'package:flutter_login_screen/main.dart';
 import 'package:flutter_login_screen/model/user.dart';
@@ -92,7 +93,7 @@ class _HomeState extends State<HomeScreen> {
         physics: NeverScrollableScrollPhysics(),
       )),
       bottomNavigationBar: FancyBottomNavigation(
-        circleColor: Colors.red,
+        circleColor: Color(COLOR_PRIMARY),
         activeIconColor: Colors.white,
         inactiveIconColor: Colors.grey,
         textColor: Colors.red,

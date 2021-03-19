@@ -13,10 +13,9 @@ import 'package:flutter_login_screen/model/user.dart';
 import 'package:flutter_login_screen/services/authenticate.dart';
 import 'package:flutter_login_screen/services/helper.dart';
 import 'package:flutter_login_screen/ui/home/homeScreen.dart';
+import 'package:flutter_login_screen/ui/widgets/custom_button.dart';
 import 'package:http/http.dart' as http;
 import 'package:universal_platform/universal_platform.dart';
-
-final _fireStoreUtils = FireStoreUtils();
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -44,8 +43,8 @@ class _LoginScreen extends State<LoginScreen> {
         child: ListView(
           children: <Widget>[
             Padding(
-              padding:
-                  const EdgeInsets.only(top: 50.0, right: 16.0, left: 16.0),
+              padding: const EdgeInsets.only(
+                  top: 200.0, right: 16.0, left: 16.0, bottom: 10.0),
               child: Text(
                 'Sign In',
                 style: TextStyle(
@@ -119,31 +118,16 @@ class _LoginScreen extends State<LoginScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 40.0, left: 40.0, top: 40),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(minWidth: double.infinity),
-                child: ElevatedButton(
-                  child: Text(
-                    'Log In',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Signatra"),
-                  ),
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.purple),
-                      elevation: MaterialStateProperty.all<double>(10.0),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ))),
-                  onPressed: () async {
-                    await login();
-                  },
-                ),
-              ),
-            ),
+                padding:
+                    const EdgeInsets.only(right: 40.0, left: 40.0, top: 40),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minWidth: double.infinity),
+                  child: CustomButton(
+                      buttonText: "Login",
+                      onPressedCallBack: () {
+                        login();
+                      }),
+                )),
           ],
         ),
       ),
