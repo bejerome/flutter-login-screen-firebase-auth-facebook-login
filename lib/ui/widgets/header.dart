@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/constants/app_themes.dart';
 import 'package:flutter_login_screen/model/user.dart';
 import 'package:flutter_login_screen/ui/widgets/getwidget.dart';
@@ -16,35 +17,40 @@ class MenuText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GFListTile(
-      title: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Icon(
-              icon,
-              color: Theme.of(context).appBarTheme.color,
-            ),
-            SizedBox(
-              width: 30.00,
-            ),
-            GestureDetector(
-              onTap: () {
-                menuTextCallBack();
-              },
-              child: Text(
-                title,
-                style: TextStyle(
-                    fontSize: 30.00,
-                    fontFamily: "Signatra",
-                    color: Colors.black),
+    return GestureDetector(
+      onTap: () {
+        menuTextCallBack();
+      },
+      child: Container(
+          height: 80.0,
+          width: MediaQuery.of(context).size.width * 0.9,
+          child: GFCard(
+            borderRadius: BorderRadius.circular(10.0),
+            elevation: 0,
+            padding: EdgeInsets.zero,
+            title: GFListTile(
+              margin: EdgeInsets.zero,
+              color: Colors.white,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    icon,
+                    color: Color(COLOR_PRIMARY),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text(title)
+                ],
               ),
-            )
-          ],
-        ),
-      ),
+              icon: Icon(
+                Icons.keyboard_arrow_right,
+                size: 30,
+              ),
+            ),
+          )),
     );
   }
 }
@@ -121,24 +127,30 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Stack(children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.3,
-                        width: MediaQuery.of(context).size.width * 0.5,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 100.0),
                         child: GFAvatar(
+                            radius: 70,
                             backgroundColor:
                                 AppThemes.lightTheme.backgroundColor,
-                            backgroundImage:
-                                NetworkImage("${user.profilePictureURL}"),
+                            backgroundImage: NetworkImage(
+                              "${user.profilePictureURL}",
+                            ),
+                            size: GFSize.SMALL,
                             shape: GFAvatarShape.circle),
                       ),
                       Positioned(
                           bottom: 0,
-                          left: MediaQuery.of(context).size.width * 0.3,
+                          left: MediaQuery.of(context).size.width * 0.25,
                           child: GFAvatar(
                             backgroundColor: Colors.white,
                             child: GestureDetector(
-                                onTap: () {}, child: Icon(Icons.edit)),
-                            size: GFSize.SMALL,
+                                onTap: () {},
+                                child: Icon(
+                                  Icons.edit,
+                                  size: 20,
+                                )),
+                            size: 20,
                           ))
                     ]),
                     SizedBox(
@@ -155,11 +167,6 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                         dividerAlignment: Alignment.center,
                       ),
                     ),
-
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [Text(data['email'])],
-                    // ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 20,
@@ -236,19 +243,22 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                               signOutCallBack();
                             },
                           ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 50.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.close_rounded,
+                                  size: 50,
+                                  color: Color(COLOR_PRIMARY),
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.arrow_upward,
-                          size: 50,
-                        ),
-                      ],
-                    )
                   ],
                 ),
               ),

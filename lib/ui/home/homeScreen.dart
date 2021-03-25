@@ -108,8 +108,8 @@ class _HomeState extends State<HomeScreen> {
                 fState.setPage(2);
               }),
           TabData(
-              iconData: Icons.feedback,
-              title: "Activity",
+              iconData: Icons.camera_alt,
+              title: "Camera",
               onclick: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => Search()))),
           TabData(iconData: Icons.search, title: "Users"),

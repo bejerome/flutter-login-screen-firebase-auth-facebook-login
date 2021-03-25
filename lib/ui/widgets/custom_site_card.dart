@@ -18,15 +18,15 @@ class CustomSiteCard extends StatelessWidget {
         print("clicked on $title");
       },
       child: GFCard(
-        borderRadius: BorderRadius.circular(10),
-        margin: EdgeInsets.only(top: 10, right: 40, left: 40, bottom: 0.0),
+        margin: EdgeInsets.only(top: 20, right: 50, left: 50, bottom: 0.0),
         elevation: 5,
         boxFit: BoxFit.cover,
         image: Image.asset(
           imagePath,
+          fit: BoxFit.cover,
         ),
         title: GFListTile(
-          margin: EdgeInsets.zero,
+          margin: EdgeInsets.only(top: 2),
           padding: EdgeInsets.zero,
           title: Container(
               alignment: Alignment.center,

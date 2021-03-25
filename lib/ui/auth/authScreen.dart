@@ -5,6 +5,7 @@ import 'package:flutter_login_screen/services/helper.dart';
 import 'package:flutter_login_screen/ui/login/loginScreen.dart';
 import 'package:flutter_login_screen/ui/signUp/signUpScreen.dart';
 import 'package:flutter_login_screen/ui/widgets/custom_button.dart';
+import 'package:flutter_login_screen/ui/widgets/google_button.dart';
 
 class AuthScreen extends StatelessWidget {
   @override
@@ -52,6 +53,10 @@ class AuthScreen extends StatelessWidget {
                   buttonText: 'Sign Up',
                   onPressedCallBack: () => push(context, new SignUpScreen()),
                 )),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 40.0, left: 40.0, top: 40),
+            child: GoogleButton(),
           )
         ],
       ),

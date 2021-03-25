@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_login_screen/constants/app_themes.dart';
 import 'package:flutter_login_screen/model/user.dart';
+import 'package:flutter_login_screen/ui/widgets/all_users_list.dart';
 
 import 'package:flutter_login_screen/ui/widgets/header.dart';
 import 'package:flutter_login_screen/ui/widgets/progress.dart';
@@ -16,37 +17,6 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
-  // handleSearch(String query) async {
-  //   Future<QuerySnapshot> users =
-  //       usersRef.where("displayName", isEqualTo: query).get();
-
-  //   setState(() {
-  //     searchResultsFuture = users;
-  //   });
-  // }
-
-  // AppBar buildSearchField() {
-  //   return AppBar(
-  //     backgroundColor: Colors.white,
-  //     title: TextFormField(
-  //       controller: searchController,
-  //       decoration: InputDecoration(
-  //           hintText: "Search for user...",
-  //           filled: true,
-  //           prefixIcon: Icon(
-  //             Icons.account_box,
-  //             size: 28.0,
-  //           ),
-  //           suffixIcon: IconButton(
-  //             icon: Icon(Icons.clear),
-  //             onPressed: () {
-  //               searchController.clear();
-  //             },
-  //           )),
-  //       onFieldSubmitted: (value) {},
-  //     ),
-  //   );
-  // }
 
   Container buildNoContent() {
     final Orientation orientation = MediaQuery.of(context).orientation;
@@ -74,25 +44,19 @@ class _SearchState extends State<Search> {
     );
   }
 
+  GetUsersList buildUsers() {
+    return GetUsersList();
+  }
+
   builSearchResults() {
     return Container();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppThemes.lightTheme.backgroundColor,
-        body: SingleChildScrollView(
-          padding: EdgeInsets.only(top: 50.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                searchResultsFuture == null
-                    ? buildNoContent()
-                    : builSearchResults(),
-              ]),
-        ));
+    return Container(
+      child: searchResultsFuture == null ? buildUsers() : builSearchResults(),
+    );
   }
 }
 

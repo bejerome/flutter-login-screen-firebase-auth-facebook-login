@@ -21,27 +21,33 @@ class _TimelineState extends State<Timeline> {
 
   @override
   Widget build(context) {
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: AppThemes.lightTheme.backgroundColor,
         body: SingleChildScrollView(
+            child: Center(
+          child: Container(
+            width: width > 414 ? width * 0.5 : width,
             child: Column(
-          children: [
-            CustomSiteCard(
-              title: "Harold Parker Forest",
-              subTitle: "Site# 45",
-              imagePath: "assets/images/campsite1.jpeg",
+              children: [
+                CustomSiteCard(
+                  title: "Harold Parker Forest",
+                  subTitle: "Site# 45",
+                  imagePath: "assets/images/campsite1.jpeg",
+                ),
+                CustomSiteCard(
+                  title: "Camp Denession",
+                  subTitle: "Site# 15",
+                  imagePath: "assets/images/campsite2.jpeg",
+                ),
+                CustomSiteCard(
+                  title: "Wompatuck State Park",
+                  subTitle: "Site# 15",
+                  imagePath: "assets/images/campsite2.jpeg",
+                ),
+              ],
             ),
-            CustomSiteCard(
-              title: "Camp Denession",
-              subTitle: "Site# 15",
-              imagePath: "assets/images/campsite2.jpeg",
-            ),
-            CustomSiteCard(
-              title: "Wompatuck State Park",
-              subTitle: "Site# 15",
-              imagePath: "assets/images/campsite2.jpeg",
-            ),
-          ],
+          ),
         )));
   }
 }
