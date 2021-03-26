@@ -23,7 +23,6 @@ class MenuText extends StatelessWidget {
       },
       child: Container(
           height: 80.0,
-          width: MediaQuery.of(context).size.width * 0.9,
           child: GFCard(
             borderRadius: BorderRadius.circular(10.0),
             elevation: 0,
@@ -33,7 +32,6 @@ class MenuText extends StatelessWidget {
               color: Colors.white,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(
                     icon,
@@ -76,10 +74,11 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
   Future<void> setProfileImage() async {}
 
   Widget build(BuildContext context) {
+    var orientation = MediaQuery.of(context).orientation;
     TextEditingController searchController = TextEditingController();
     return Container(
       color: AppThemes.lightTheme.backgroundColor,
-      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+      margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
       child: GFAppBar(
         searchController: searchController,
         searchHintStyle: TextStyle(color: Colors.black, fontSize: 18),
@@ -115,20 +114,18 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
             );
           },
           openBuilder: (context, action) {
-            return GestureDetector(
-              onVerticalDragEnd: (details) {
-                Navigator.pop(context);
-              },
+            return SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.only(top: 10),
-                height: MediaQuery.of(context).size.height,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Stack(children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 100.0),
+                        padding: orientation == Orientation.portrait
+                            ? const EdgeInsets.only(top: 100.0)
+                            : const EdgeInsets.only(top: 0.0),
                         child: GFAvatar(
                             radius: 70,
                             backgroundColor:
@@ -169,7 +166,7 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: 20,
+                      height: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -209,10 +206,13 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: 30,
+                      height: 0,
                     ),
-                    Flexible(
-                      fit: FlexFit.tight,
+                    Container(
+                      padding: orientation == Orientation.portrait
+                          ? EdgeInsets.only(left: 0.0, right: 0.0, bottom: 1)
+                          : EdgeInsets.only(
+                              left: 100.0, right: 100.0, bottom: 15),
                       child: Column(
                         children: [
                           MenuText(
@@ -244,14 +244,20 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                             },
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 50.0),
+                            padding: orientation == Orientation.portrait
+                                ? EdgeInsets.only(top: 50.0)
+                                : EdgeInsets.only(top: 0.0),
+                            // change to 0 from landscape, 50 portrait
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.close_rounded,
-                                  size: 50,
-                                  color: Color(COLOR_PRIMARY),
+                                GestureDetector(
+                                  onTap: () => Navigator.pop(context),
+                                  child: Icon(
+                                    Icons.close_rounded,
+                                    size: 50,
+                                    color: Color(COLOR_PRIMARY),
+                                  ),
                                 ),
                               ],
                             ),

@@ -11,7 +11,7 @@ import 'package:flutter_login_screen/ui/auth/authScreen.dart';
 import 'package:flutter_login_screen/ui/home/homeScreen.dart';
 import 'package:flutter_login_screen/ui/onBoarding/onBoardingScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:universal_platform/universal_platform.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 // import 'dart:html' if (UniversalPlatform.isWeb) '';
 

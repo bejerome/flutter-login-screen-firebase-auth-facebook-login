@@ -17,6 +17,8 @@ import 'package:flutter_login_screen/ui/widgets/custom_button.dart';
 import 'package:http/http.dart' as http;
 import 'package:universal_platform/universal_platform.dart';
 
+var orientation;
+
 class LoginScreen extends StatefulWidget {
   @override
   State createState() {
@@ -31,104 +33,119 @@ class _LoginScreen extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    orientation = MediaQuery.of(context).orientation;
+    var widthPortrait = MediaQuery.of(context).size.width;
+    var widthLandscape = MediaQuery.of(context).size.width * 0.5;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0.0,
       ),
-      body: Form(
-        key: _key,
-        autovalidateMode: _validate,
-        child: ListView(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 200.0, right: 16.0, left: 16.0, bottom: 10.0),
-              child: Text(
-                'Sign In',
-                style: TextStyle(
-                    color: Color(COLOR_PRIMARY),
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            ConstrainedBox(
-              constraints: BoxConstraints(minWidth: double.infinity),
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(top: 32.0, right: 24.0, left: 24.0),
-                child: TextFormField(
-                    textAlignVertical: TextAlignVertical.center,
-                    textInputAction: TextInputAction.next,
-                    validator: validateEmail,
-                    onSaved: (String val) {
-                      email = val;
-                    },
-                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
-                    style: TextStyle(fontSize: 18.0),
-                    keyboardType: TextInputType.emailAddress,
-                    cursorColor: Color(COLOR_PRIMARY),
-                    decoration: InputDecoration(
-                        contentPadding:
-                            new EdgeInsets.only(left: 16, right: 16),
-                        fillColor: Colors.white,
-                        hintText: 'E-mail Address',
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                            borderSide: BorderSide(
-                                color: Color(COLOR_PRIMARY), width: 2.0)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                        ))),
-              ),
-            ),
-            ConstrainedBox(
-              constraints: BoxConstraints(minWidth: double.infinity),
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(top: 32.0, right: 24.0, left: 24.0),
-                child: TextFormField(
-                    textAlignVertical: TextAlignVertical.center,
-                    validator: validatePassword,
-                    onSaved: (String val) {
-                      password = val;
-                    },
-                    onFieldSubmitted: (password) async {
-                      await login();
-                    },
-                    obscureText: true,
-                    textInputAction: TextInputAction.done,
+      body: Center(
+        child: Container(
+          width: orientation == Orientation.portrait
+              ? widthPortrait
+              : widthLandscape,
+          child: Form(
+            key: _key,
+            autovalidateMode: _validate,
+            child: ListView(
+              children: <Widget>[
+                Padding(
+                  padding: (orientation == Orientation.portrait
+                      ? const EdgeInsets.only(
+                          top: 200, right: 16.0, left: 16.0, bottom: 10.0)
+                      : const EdgeInsets.only(
+                          top: 10, right: 16.0, left: 16.0, bottom: 10.0)),
+                  child: Text(
+                    'Sign In',
                     style: TextStyle(
-                      fontSize: 18.0,
-                    ),
-                    cursorColor: Color(COLOR_PRIMARY),
-                    decoration: InputDecoration(
-                        contentPadding:
-                            new EdgeInsets.only(left: 16, right: 16),
-                        fillColor: Colors.white,
-                        hintText: 'Password',
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                            borderSide: BorderSide(
-                                color: Color(COLOR_PRIMARY), width: 2.0)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                        ))),
-              ),
+                        color: Color(COLOR_PRIMARY),
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: double.infinity),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 32.0, right: 24.0, left: 24.0),
+                    child: TextFormField(
+                        textAlignVertical: TextAlignVertical.center,
+                        textInputAction: TextInputAction.next,
+                        validator: validateEmail,
+                        onSaved: (String val) {
+                          email = val;
+                        },
+                        onFieldSubmitted: (_) =>
+                            FocusScope.of(context).nextFocus(),
+                        style: TextStyle(fontSize: 18.0),
+                        keyboardType: TextInputType.emailAddress,
+                        cursorColor: Color(COLOR_PRIMARY),
+                        decoration: InputDecoration(
+                            contentPadding:
+                                new EdgeInsets.only(left: 16, right: 16),
+                            fillColor: Colors.white,
+                            hintText: 'E-mail Address',
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                                borderSide: BorderSide(
+                                    color: Color(COLOR_PRIMARY), width: 2.0)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ))),
+                  ),
+                ),
+                ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: double.infinity),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 32.0, right: 24.0, left: 24.0),
+                    child: TextFormField(
+                        textAlignVertical: TextAlignVertical.center,
+                        validator: validatePassword,
+                        onSaved: (String val) {
+                          password = val;
+                        },
+                        onFieldSubmitted: (password) async {
+                          await login();
+                        },
+                        obscureText: true,
+                        textInputAction: TextInputAction.done,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                        cursorColor: Color(COLOR_PRIMARY),
+                        decoration: InputDecoration(
+                            contentPadding:
+                                new EdgeInsets.only(left: 16, right: 16),
+                            fillColor: Colors.white,
+                            hintText: 'Password',
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                                borderSide: BorderSide(
+                                    color: Color(COLOR_PRIMARY), width: 2.0)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ))),
+                  ),
+                ),
+                Padding(
+                    padding:
+                        const EdgeInsets.only(right: 40.0, left: 40.0, top: 40),
+                    child: ConstrainedBox(
+                      constraints:
+                          const BoxConstraints(minWidth: double.infinity),
+                      child: CustomButton(
+                          buttonText: "Login",
+                          onPressedCallBack: () {
+                            login();
+                          }),
+                    )),
+              ],
             ),
-            Padding(
-                padding:
-                    const EdgeInsets.only(right: 40.0, left: 40.0, top: 40),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(minWidth: double.infinity),
-                  child: CustomButton(
-                      buttonText: "Login",
-                      onPressedCallBack: () {
-                        login();
-                      }),
-                )),
-          ],
+          ),
         ),
       ),
     );

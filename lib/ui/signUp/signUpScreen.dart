@@ -31,6 +31,7 @@ class _SignUpState extends State<SignUpScreen> {
     if (Platform.isAndroid) {
       retrieveLostData();
     }
+    var orientation = MediaQuery.of(context).orientation;
 
     return Scaffold(
       appBar: AppBar(
@@ -40,7 +41,9 @@ class _SignUpState extends State<SignUpScreen> {
       ),
       body: SingleChildScrollView(
         child: new Container(
-          margin: new EdgeInsets.only(left: 16.0, right: 16, bottom: 16),
+          margin: orientation == Orientation.landscape
+              ? EdgeInsets.only(left: 150.0, right: 150, bottom: 16)
+              : EdgeInsets.only(left: 16.0, right: 16, bottom: 16),
           child: new Form(
             key: _key,
             autovalidateMode: _validate,
@@ -121,7 +124,7 @@ class _SignUpState extends State<SignUpScreen> {
             )),
         Padding(
           padding:
-          const EdgeInsets.only(left: 8.0, top: 32, right: 8, bottom: 8),
+              const EdgeInsets.only(left: 8.0, top: 32, right: 8, bottom: 8),
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: <Widget>[
@@ -134,13 +137,13 @@ class _SignUpState extends State<SignUpScreen> {
                     height: 170,
                     child: _image == null
                         ? Image.asset(
-                      'assets/images/placeholder.jpg',
-                      fit: BoxFit.cover,
-                    )
+                            'assets/images/placeholder.jpg',
+                            fit: BoxFit.cover,
+                          )
                         : Image.file(
-                      _image,
-                      fit: BoxFit.cover,
-                    ),
+                            _image,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
               ),
@@ -160,7 +163,7 @@ class _SignUpState extends State<SignUpScreen> {
             constraints: BoxConstraints(minWidth: double.infinity),
             child: Padding(
                 padding:
-                const EdgeInsets.only(top: 16.0, right: 8.0, left: 8.0),
+                    const EdgeInsets.only(top: 16.0, right: 8.0, left: 8.0),
                 child: TextFormField(
                     validator: validateName,
                     onSaved: (String val) {
@@ -184,7 +187,7 @@ class _SignUpState extends State<SignUpScreen> {
             constraints: BoxConstraints(minWidth: double.infinity),
             child: Padding(
                 padding:
-                const EdgeInsets.only(top: 16.0, right: 8.0, left: 8.0),
+                    const EdgeInsets.only(top: 16.0, right: 8.0, left: 8.0),
                 child: TextFormField(
                     validator: validateName,
                     onSaved: (String val) {
@@ -208,7 +211,7 @@ class _SignUpState extends State<SignUpScreen> {
             constraints: BoxConstraints(minWidth: double.infinity),
             child: Padding(
                 padding:
-                const EdgeInsets.only(top: 16.0, right: 8.0, left: 8.0),
+                    const EdgeInsets.only(top: 16.0, right: 8.0, left: 8.0),
                 child: TextFormField(
                     keyboardType: TextInputType.phone,
                     textInputAction: TextInputAction.next,
@@ -233,7 +236,7 @@ class _SignUpState extends State<SignUpScreen> {
             constraints: BoxConstraints(minWidth: double.infinity),
             child: Padding(
                 padding:
-                const EdgeInsets.only(top: 16.0, right: 8.0, left: 8.0),
+                    const EdgeInsets.only(top: 16.0, right: 8.0, left: 8.0),
                 child: TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,

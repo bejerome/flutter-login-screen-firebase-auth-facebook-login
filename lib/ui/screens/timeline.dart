@@ -21,6 +21,7 @@ class _TimelineState extends State<Timeline> {
 
   @override
   Widget build(context) {
+    var orienttion = MediaQuery.of(context).orientation;
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: AppThemes.lightTheme.backgroundColor,
