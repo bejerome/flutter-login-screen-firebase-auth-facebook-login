@@ -44,4 +44,25 @@ flutter:
     - family: Signatra
       fonts:
         - asset: assets/fonts/Signatra.ttf
+    - family: Sans_bold
+      fonts:
+        - asset: assets/fonts/Product-Sans-Bold.ttf
+    - family: Sans_bold_italic
+      fonts:
+        - asset: assets/fonts/Product-Sans-Bold-Italic.ttf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Medium.ttf
+    - family: Work_sans
+      fonts:
+        - asset: assets/fonts/WorkSans-Regular.ttf
+    - family: Work_sans_bold
+      fonts:
+        - asset: assets/fonts/WorkSans-Bold.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat/Montserrat-SemiBold.ttf
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/nunito/nunito-sans.semibold.ttf
          

@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/constants/app_themes.dart';
@@ -71,13 +73,11 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
       this.user})
       : super(key: key);
 
-  Future<void> setProfileImage() async {}
-
   Widget build(BuildContext context) {
     var orientation = MediaQuery.of(context).orientation;
     TextEditingController searchController = TextEditingController();
     return Container(
-      color: AppThemes.lightTheme.backgroundColor,
+      color: Colors.transparent,
       margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
       child: GFAppBar(
         searchController: searchController,
@@ -89,11 +89,12 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
         elevation: 0.0,
         titleSpacing: 50,
         title: Text(
-          isAppTitle ? user.firstName : "",
+          isAppTitle ? user.fullName() : "",
           style: TextStyle(
-              fontSize: isAppTitle ? 18 : 30,
-              fontFamily: "Signatra",
-              color: Colors.black),
+            fontSize: isAppTitle ? 18 : 30,
+            fontFamily: "Montserrat",
+            color: Colors.black,
+          ),
         ),
         backgroundColor: AppThemes.lightTheme.backgroundColor,
         leading: OpenContainer(
@@ -172,21 +173,16 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          child: GFButtonBadge(
-                            type: GFButtonType.outline2x,
-                            icon: Icon(Icons.email),
-                            color: Colors.transparent,
-                            onPressed: () {},
-                            text: 'Email',
-                            textColor:
-                                Theme.of(context).bottomAppBarTheme.color,
-                          ),
+                        CustomFollowersBadge(
+                          currentUser: user,
                         ),
                         Container(
                           child: GFButtonBadge(
                             type: GFButtonType.outline2x,
-                            icon: Icon(Icons.email),
+                            icon: GFBadge(
+                              color: Colors.green,
+                              child: Text("5"),
+                            ),
                             color: Colors.transparent,
                             onPressed: () {},
                             text: 'Posts',
@@ -277,4 +273,49 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(height);
+}
+
+class CustomFollowersBadge extends StatelessWidget {
+  final User currentUser;
+  const CustomFollowersBadge({Key key, this.currentUser}) : super(key: key);
+
+  Future<QuerySnapshot> checkifFollowing() async {
+    var result = await FirebaseFirestore.instance
+        .collection("followers")
+        .doc(currentUser.userID)
+        .collection("userFollowers")
+        .get()
+        .then((doc) => doc);
+    return result;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Future<QuerySnapshot> followersRef = checkifFollowing();
+
+    return FutureBuilder<QuerySnapshot>(
+        future: followersRef,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text("Something went wrong");
+          }
+
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Container(
+              child: GFButtonBadge(
+                type: GFButtonType.transparent,
+                icon: GFBadge(
+                  child: Text("${snapshot.data.size}"),
+                  color: Colors.green,
+                ),
+                color: Colors.transparent,
+                onPressed: () {},
+                text: 'Followers',
+                textColor: Theme.of(context).bottomAppBarTheme.color,
+              ),
+            );
+          }
+          return Text("loading");
+        });
+  }
 }

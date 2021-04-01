@@ -4,14 +4,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login_screen/services/authenticate.dart';
 
 import 'getwidget.dart';
 
 final CollectionReference usersRef =
     FirebaseFirestore.instance.collection('users');
 final CollectionReference followersRef =
-    FirebaseFirestore.instance.collection('follow');
+    FirebaseFirestore.instance.collection('followers');
 final CollectionReference followingRef =
     FirebaseFirestore.instance.collection('following');
 final CollectionReference activityFeedRef =
@@ -19,52 +18,37 @@ final CollectionReference activityFeedRef =
 final currentUser = FirebaseAuth.instance.currentUser;
 final DateTime timestamp = DateTime.now();
 
-class UsersList extends StatefulWidget {
-  UsersList({
+class FollowersUsers extends StatefulWidget {
+  FollowersUsers({
     Key key,
   }) : super(key: key);
-  _UsersState createState() => _UsersState();
+  _FollowersUsersState createState() => _FollowersUsersState();
 }
 
-class _UsersState extends State<UsersList> {
-  FireStoreUtils firestore = new FireStoreUtils();
-  bool isFollowing = false;
-  handleFollowers(user) async {
-    var currentUserData = await firestore.getCurrentUser(currentUser.uid);
+class _FollowersUsersState extends State<FollowersUsers> {
+  handleFollowers(id) {
     // put that user on your following collection
 
     followersRef
-        .doc("${user['id']}")
+        .doc("${currentUser.uid}")
         .collection("userFollowers")
-        .doc(currentUserData.userID)
-        .set({
-      "type": "followers",
-      "userId": currentUserData.userID,
-      "userName": currentUserData.firstName,
-      "userProfileImg": currentUserData.profilePictureURL,
-      "timestamp": timestamp
-    });
+        .doc(id)
+        .set({});
     // Add me to users following list
     followingRef
-        .doc("${currentUser.uid}")
+        .doc(id)
         .collection("userFollowing")
-        .doc(user['id'])
-        .set({
-      "type": "following",
-      "userId": user['id'],
-      "userName": user['firstName'],
-      "userProfileImg": user['profilePictureURL'],
-      "timestamp": timestamp
-    });
+        .doc("${currentUser.uid}")
+        .set({});
     activityFeedRef
-        .doc(user['id'])
+        .doc(id)
         .collection("feedItems")
         .doc("${currentUser.uid}")
         .set({
       "type": "follow",
-      "ownerId": "${user['id']}",
+      "ownerId": "$id",
       "userId": "${currentUser.uid}",
-      "userProfileImg": currentUserData.profilePictureURL,
+      "userProfileImg": currentUser.photoURL,
       "timestamp": timestamp
     });
   }
@@ -105,16 +89,13 @@ class _UsersState extends State<UsersList> {
     });
   }
 
-  Future<bool> checkifFollowing(id) async {
-    var result;
-    await followingRef
-        .doc(id)
-        .collection("userFollowing")
-        .doc("${currentUser.uid}")
+  Future<QuerySnapshot> checkifFollowing() async {
+    var result = await FirebaseFirestore.instance
+        .collection("followers")
+        .doc(currentUser.uid)
+        .collection("userFollowers")
         .get()
-        .then((doc) {
-      result = (doc.exists) ? true : false;
-    });
+        .then((doc) => doc);
     return result;
   }
 
@@ -150,10 +131,10 @@ class _UsersState extends State<UsersList> {
               ),
               icon: OutlinedButton(
                 onPressed: () {
-                  handleFollowers(document.data());
+                  // handleFollowers("${document.data()['id']}");
                   // handleUnfollow("${document.data()['id']}");
                 },
-                child: isFollowing ? Text("Following") : Text("Follow"),
+                child: Text("Following"),
               ),
             );
           }).toList());

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_screen/ui/widgets/getwidget.dart';
@@ -79,7 +80,7 @@ class GFCard extends StatelessWidget {
   final Widget content;
 
   /// image widget can be used
-  final Image image;
+  final CachedNetworkImage image;
 
   /// overlay image [GFImageOverlay] widget can be used
   /// to display image with shaded overlay

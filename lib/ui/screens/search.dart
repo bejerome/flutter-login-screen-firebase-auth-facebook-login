@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login_screen/constants/app_themes.dart';
 import 'package:flutter_login_screen/model/user.dart';
 import 'package:flutter_login_screen/ui/widgets/all_users_list.dart';
+import 'package:flutter_login_screen/ui/widgets/followers_list.dart';
 
 import 'package:flutter_login_screen/ui/widgets/header.dart';
 import 'package:flutter_login_screen/ui/widgets/progress.dart';
@@ -44,8 +45,8 @@ class _SearchState extends State<Search> {
     );
   }
 
-  GetUsersList buildUsers() {
-    return GetUsersList();
+  Widget buildUsers() {
+    return UsersList();
   }
 
   builSearchResults() {
