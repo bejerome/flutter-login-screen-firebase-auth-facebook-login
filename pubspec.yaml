@@ -61,8 +61,11 @@ flutter:
         - asset: assets/fonts/WorkSans-Bold.ttf
     - family: Montserrat
       fonts:
-        - asset: assets/fonts/Montserrat/Montserrat-SemiBold.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-SemiBoldItalic.ttf
     - family: Nunito
       fonts:
         - asset: assets/fonts/nunito/nunito-sans.semibold.ttf
+    - family: Circular
+      fonts:
+        - asset: assets/fonts/Circular/Circular-Std-Font.otf
          

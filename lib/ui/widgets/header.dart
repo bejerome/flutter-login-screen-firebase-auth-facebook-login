@@ -176,18 +176,8 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                         CustomFollowersBadge(
                           currentUser: user,
                         ),
-                        Container(
-                          child: GFButtonBadge(
-                            type: GFButtonType.outline2x,
-                            icon: GFBadge(
-                              color: Colors.green,
-                              child: Text("5"),
-                            ),
-                            color: Colors.transparent,
-                            onPressed: () {},
-                            text: 'Posts',
-                            textColor: Colors.black,
-                          ),
+                        CustomFollowingsBadge(
+                          currentUser: user,
                         ),
                         Container(
                           child: GFButtonBadge(
@@ -195,7 +185,7 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                             icon: Icon(Icons.post_add_sharp),
                             color: Colors.transparent,
                             onPressed: () {},
-                            text: 'Comments',
+                            text: 'Postings',
                           ),
                         ),
                       ],
@@ -281,7 +271,7 @@ class CustomFollowersBadge extends StatelessWidget {
 
   Future<QuerySnapshot> checkifFollowing() async {
     var result = await FirebaseFirestore.instance
-        .collection("followers")
+        .collection("follow")
         .doc(currentUser.userID)
         .collection("userFollowers")
         .get()
@@ -311,6 +301,51 @@ class CustomFollowersBadge extends StatelessWidget {
                 color: Colors.transparent,
                 onPressed: () {},
                 text: 'Followers',
+                textColor: Theme.of(context).bottomAppBarTheme.color,
+              ),
+            );
+          }
+          return Text("loading");
+        });
+  }
+}
+
+class CustomFollowingsBadge extends StatelessWidget {
+  final User currentUser;
+  const CustomFollowingsBadge({Key key, this.currentUser}) : super(key: key);
+
+  Future<QuerySnapshot> checkifFollowing() async {
+    var result = await FirebaseFirestore.instance
+        .collection("following")
+        .doc(currentUser.userID)
+        .collection("userFollowing")
+        .get()
+        .then((doc) => doc);
+    return result;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Future<QuerySnapshot> followersRef = checkifFollowing();
+
+    return FutureBuilder<QuerySnapshot>(
+        future: followersRef,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text("Something went wrong");
+          }
+
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Container(
+              child: GFButtonBadge(
+                type: GFButtonType.transparent,
+                icon: GFBadge(
+                  child: Text("${snapshot.data.size}"),
+                  color: Colors.green,
+                ),
+                color: Colors.transparent,
+                onPressed: () {},
+                text: 'Following',
                 textColor: Theme.of(context).bottomAppBarTheme.color,
               ),
             );

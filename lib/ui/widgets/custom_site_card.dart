@@ -23,11 +23,11 @@ class CustomSiteCard extends StatelessWidget {
         },
         child: Stack(children: [
           GFCard(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
             color: Colors.transparent,
             margin: EdgeInsets.only(top: 20, right: 40, left: 40, bottom: 0.0),
             elevation: 0,
-            boxFit: BoxFit.cover,
+            boxFit: BoxFit.scaleDown,
             image: CachedNetworkImage(
               imageUrl: imagePath,
             ),
@@ -64,15 +64,6 @@ class CustomSiteCard extends StatelessWidget {
                   },
                 ),
               ),
-              subTitle: Container(
-                  margin: EdgeInsets.only(top: 10, bottom: 0),
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    subTitle,
-                    style: TextStyle(
-                      fontFamily: "Montserrat",
-                    ),
-                  )),
               description: Container(
                 alignment: Alignment.topLeft,
                 child: Text(title,
@@ -82,6 +73,14 @@ class CustomSiteCard extends StatelessWidget {
                       fontFamily: "Montserrat",
                     )),
               ),
+              subTitle: Container(
+                  margin: EdgeInsets.only(top: 10, bottom: 0),
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    subTitle,
+                    style: TextStyle(
+                        fontFamily: "Montserrat", color: Colors.black54),
+                  )),
             ),
           ),
           Positioned(
@@ -90,12 +89,16 @@ class CustomSiteCard extends StatelessWidget {
                     Icons.favorite,
                     color: Colors.red,
                   )
-                : Icon(
-                    Icons.favorite_border_outlined,
-                    color: Colors.white,
+                : GFAvatar(
+                    radius: 13,
+                    child: Icon(
+                      Icons.favorite,
+                      color: Colors.white,
+                      size: 15,
+                    ),
                   ),
-            left: MediaQuery.of(context).size.width * 0.8,
-            top: 40.0,
+            left: 45,
+            top: 20.0,
           )
         ]));
   }

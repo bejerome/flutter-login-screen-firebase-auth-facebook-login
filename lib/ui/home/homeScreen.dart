@@ -97,7 +97,7 @@ class _HomeState extends State<HomeScreen> {
         activeIconColor: Colors.white,
         inactiveIconColor: Colors.grey,
         textColor: Colors.red,
-        barBackgroundColor: Colors.white,
+        barBackgroundColor: AppThemes.lightTheme.backgroundColor,
         tabs: [
           TabData(
               iconData: Icons.home,

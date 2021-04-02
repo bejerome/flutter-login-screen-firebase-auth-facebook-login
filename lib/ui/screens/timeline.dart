@@ -1,18 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/constants/app_themes.dart';
-import 'package:flutter_login_screen/services/authenticate.dart';
-import 'package:flutter_login_screen/ui/widgets/all_users_list.dart';
 import 'package:flutter_login_screen/ui/widgets/campsites_list.dart';
-import 'package:flutter_login_screen/ui/widgets/custom_site_card.dart';
-import 'package:flutter_login_screen/ui/widgets/followers_list.dart';
 import 'package:flutter_login_screen/ui/widgets/following_list.dart';
-import 'package:flutter_login_screen/ui/widgets/getwidget.dart';
 
 final CollectionReference usersRef =
     FirebaseFirestore.instance.collection('users');
@@ -116,7 +108,6 @@ class _TimelineState extends State<Timeline> {
   }
 
   Widget timelinePortrait() {
-    var width = MediaQuery.of(context).size.width;
     return CampSiteList();
   }
 
