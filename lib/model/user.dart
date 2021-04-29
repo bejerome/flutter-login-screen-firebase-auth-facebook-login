@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
@@ -31,7 +29,7 @@ class User {
       this.userID = '',
       this.profilePictureURL = ''})
       : this.lastOnlineTimestamp = lastOnlineTimestamp ?? Timestamp.now(),
-        this.appIdentifier = 'Flutter Login Screen ${Platform.operatingSystem}';
+        this.appIdentifier = 'Flutter Login Screen';
 
   String fullName() {
     return '$firstName $lastName';

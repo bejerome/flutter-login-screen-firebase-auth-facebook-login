@@ -15,8 +15,8 @@
             "request": "launch",
             "type": "dart",
             "args": [
-                "--web-port=5000",
-                "--web-enable-expression-evaluation"
+                "chrome",
+                "--web-renderer html"
             ],
         },
     ]

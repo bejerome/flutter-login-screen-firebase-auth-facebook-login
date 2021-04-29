@@ -5,20 +5,27 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/model/user.dart';
+import 'package:flutter_login_screen/providers/app_providers.dart';
 import 'package:flutter_login_screen/services/authenticate.dart';
 import 'package:flutter_login_screen/services/helper.dart';
 import 'package:flutter_login_screen/ui/auth/authScreen.dart';
 import 'package:flutter_login_screen/ui/home/homeScreen.dart';
 import 'package:flutter_login_screen/ui/onBoarding/onBoardingScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+
+import 'package:provider/provider.dart';
 
 // import 'dart:html' if (UniversalPlatform.isWeb) '';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(new MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AppProvider(),
+      child: new MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {

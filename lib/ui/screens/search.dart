@@ -1,13 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_login_screen/constants/app_themes.dart';
-import 'package:flutter_login_screen/model/user.dart';
 import 'package:flutter_login_screen/ui/widgets/all_users_list.dart';
-import 'package:flutter_login_screen/ui/widgets/followers_list.dart';
 
 import 'package:flutter_login_screen/ui/widgets/header.dart';
-import 'package:flutter_login_screen/ui/widgets/progress.dart';
 import 'package:flutter_svg/svg.dart';
 
 class Search extends StatefulWidget {
@@ -17,10 +13,8 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   TextEditingController searchController = TextEditingController();
-  Future<QuerySnapshot> searchResultsFuture;
 
   Container buildNoContent() {
-    final Orientation orientation = MediaQuery.of(context).orientation;
     return Container(
       child: Center(
         child: ListView(
@@ -28,7 +22,7 @@ class _SearchState extends State<Search> {
           children: [
             SvgPicture.asset(
               'assets/images/search.svg',
-              height: orientation == orientation ? 300.0 : 200,
+              // height: orientation == orientation ? 300.0 : 200,
             ),
             Text(
               "Find Users",
@@ -49,15 +43,13 @@ class _SearchState extends State<Search> {
     return UsersList();
   }
 
-  builSearchResults() {
+  Widget builSearchResults() {
     return Container();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: searchResultsFuture == null ? buildUsers() : builSearchResults(),
-    );
+    return buildUsers();
   }
 }
 

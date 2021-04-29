@@ -13,6 +13,7 @@ import 'package:flutter_login_screen/ui/screens/activity_feed.dart';
 import 'package:flutter_login_screen/ui/screens/profile.dart';
 import 'package:flutter_login_screen/ui/screens/search.dart';
 import 'package:flutter_login_screen/ui/screens/timeline.dart';
+import 'package:flutter_login_screen/ui/screens/upload.dart';
 import 'package:flutter_login_screen/ui/widgets/header.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 
@@ -23,14 +24,12 @@ class HomeScreen extends StatefulWidget {
 
   @override
   State createState() {
-    return _HomeState(user);
+    return _HomeState();
   }
 }
 
 class _HomeState extends State<HomeScreen> {
-  final User user;
   GlobalKey bottomNavigationKey = GlobalKey();
-  _HomeState(this.user);
   PageController pageController;
   int pageIndex = 0;
   bool isSearchBar = false;
@@ -58,9 +57,9 @@ class _HomeState extends State<HomeScreen> {
   }
 
   void logout() async {
-    user.active = false;
-    user.lastOnlineTimestamp = Timestamp.now();
-    FireStoreUtils.updateCurrentUser(user);
+    widget.user.active = false;
+    widget.user.lastOnlineTimestamp = Timestamp.now();
+    FireStoreUtils.updateCurrentUser(widget.user);
     await auth.FirebaseAuth.instance.signOut();
     MyAppState.currentUser = null;
     pushAndRemoveUntil(context, AuthScreen(), false);
@@ -71,27 +70,26 @@ class _HomeState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppThemes.lightTheme.backgroundColor,
       appBar: CustomHeader(
-        user: user,
+        user: widget.user,
         isSearchBar: isSearchBar,
         isAppTitle: true,
         signOutCallBack: () {
           logout();
         },
       ),
-      body: Center(
-          child: PageView(
+      body: PageView(
         children: [
           Timeline(),
-          ActivityFeed(),
+          Upload(),
           Search(),
           Profile(
-            user: user,
+            user: widget.user,
           ),
         ],
         controller: pageController,
         onPageChanged: onPageChanged,
         physics: NeverScrollableScrollPhysics(),
-      )),
+      ),
       bottomNavigationBar: FancyBottomNavigation(
         circleColor: Color(COLOR_PRIMARY),
         activeIconColor: Colors.white,

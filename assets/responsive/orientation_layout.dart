@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 
 class OrientationLayout extends StatelessWidget {
   final Widget landscape;

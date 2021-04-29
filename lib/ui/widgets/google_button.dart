@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login_screen/ui/home/homeScreen.dart';
-import 'package:flutter_login_screen/ui/widgets/dialog.dart';
+import 'package:flutter_login_screen/ui/widgets/profile_dialog.dart';
 
 class GoogleButton extends StatefulWidget {
   @override
@@ -25,7 +25,7 @@ class _GoogleButtonState extends State<GoogleButton> {
         splashColor: Colors.blueGrey[200],
         onPressed: () async {
           return showDialog(
-              context: context, builder: (context) => AuthDialog());
+              context: context, builder: (context) => ProfileDialog());
           // setState(() {
           //   _isProcessing = true;
           // });

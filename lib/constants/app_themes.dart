@@ -11,9 +11,11 @@ class AppThemes {
   static const Color _lightOnPrimaryColor = Colors.white;
   static const Color _lightButtonPrimaryColor = Colors.orangeAccent;
   static const Color _lightAppBarColor = Colors.orangeAccent;
+
+  static const Color _lightAccentColor = Color(0XFFD8ECF1);
   static Color _lightIconColor = Colors.orangeAccent;
   static Color _lightSnackBarBackgroundErrorColor = Colors.redAccent;
-  static Color _lightBackgroundColor = Color.fromRGBO(240, 239, 240, 1);
+  static Color _lightBackgroundColor = Color(0XFFF3F5F7);
 
   //text theme for light theme
   static final TextStyle _lightScreenHeadingTextStyle =

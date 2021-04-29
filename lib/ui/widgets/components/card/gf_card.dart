@@ -80,7 +80,7 @@ class GFCard extends StatelessWidget {
   final Widget content;
 
   /// image widget can be used
-  final CachedNetworkImage image;
+  final Image image;
 
   /// overlay image [GFImageOverlay] widget can be used
   /// to display image with shaded overlay

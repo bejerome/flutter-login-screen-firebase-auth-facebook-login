@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'getwidget.dart';
 
@@ -28,9 +29,11 @@ class CustomSiteCard extends StatelessWidget {
             margin: EdgeInsets.only(top: 20, right: 40, left: 40, bottom: 0.0),
             elevation: 0,
             boxFit: BoxFit.scaleDown,
-            image: CachedNetworkImage(
-              imageUrl: imagePath,
-            ),
+            image: UniversalPlatform.isWeb
+                ? Image(image: NetworkImage(imagePath))
+                : CachedNetworkImage(
+                    imageUrl: imagePath,
+                  ),
             title: GFListTile(
               margin: EdgeInsets.only(top: 2),
               padding: EdgeInsets.zero,

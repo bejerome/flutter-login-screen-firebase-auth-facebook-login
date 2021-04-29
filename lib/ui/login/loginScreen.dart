@@ -10,11 +10,13 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/main.dart';
 import 'package:flutter_login_screen/model/user.dart';
+import 'package:flutter_login_screen/providers/app_providers.dart';
 import 'package:flutter_login_screen/services/authenticate.dart';
 import 'package:flutter_login_screen/services/helper.dart';
 import 'package:flutter_login_screen/ui/home/homeScreen.dart';
 import 'package:flutter_login_screen/ui/widgets/custom_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 var orientation;
@@ -33,7 +35,7 @@ class _LoginScreen extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    orientation = MediaQuery.of(context).orientation;
+    // orientation = MediaQuery.of(context).orientation;
     var widthPortrait = MediaQuery.of(context).size.width;
     var widthLandscape = MediaQuery.of(context).size.width * 0.5;
     return Scaffold(
@@ -44,20 +46,21 @@ class _LoginScreen extends State<LoginScreen> {
       ),
       body: Center(
         child: Container(
-          width: orientation == Orientation.portrait
-              ? widthPortrait
-              : widthLandscape,
+          width: (UniversalPlatform.isWeb || UniversalPlatform.isMacOS)
+              ? widthLandscape
+              : widthPortrait,
           child: Form(
             key: _key,
             autovalidateMode: _validate,
             child: ListView(
               children: <Widget>[
                 Padding(
-                  padding: (orientation == Orientation.portrait
-                      ? const EdgeInsets.only(
-                          top: 200, right: 16.0, left: 16.0, bottom: 10.0)
-                      : const EdgeInsets.only(
-                          top: 10, right: 16.0, left: 16.0, bottom: 10.0)),
+                  padding:
+                      (UniversalPlatform.isWeb || UniversalPlatform.isMacOS)
+                          ? const EdgeInsets.only(
+                              top: 10, right: 16.0, left: 16.0, bottom: 10.0)
+                          : const EdgeInsets.only(
+                              top: 200, right: 16.0, left: 16.0, bottom: 10.0),
                   child: Text(
                     'Sign In',
                     style: TextStyle(
@@ -185,6 +188,8 @@ class _LoginScreen extends State<LoginScreen> {
         await FireStoreUtils.updateCurrentUser(user);
         hideProgress();
         MyAppState.currentUser = user;
+        Provider.of<AppProvider>(context, listen: false)
+            .storeCurrentUser(currentUser: user);
       }
       return user;
     } on auth.FirebaseAuthException catch (exception) {

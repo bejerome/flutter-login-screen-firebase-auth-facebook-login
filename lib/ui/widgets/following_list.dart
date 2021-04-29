@@ -1,10 +1,15 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_login_screen/model/user.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login_screen/ui/widgets/all_users_list.dart';
+import 'package:flutter_login_screen/providers/app_providers.dart';
+import 'package:flutter_login_screen/ui/widgets/profile_dialog.dart';
+import 'package:provider/provider.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'getwidget.dart';
 
@@ -16,34 +21,31 @@ final CollectionReference followingRef =
     FirebaseFirestore.instance.collection('following');
 final CollectionReference activityFeedRef =
     FirebaseFirestore.instance.collection('feeds');
-final currentUser = FirebaseAuth.instance.currentUser;
 final DateTime timestamp = DateTime.now();
 
 class FollowingUsers extends StatefulWidget {
-  FollowingUsers({
-    Key key,
-  }) : super(key: key);
   _FollowingUsersState createState() => _FollowingUsersState();
 }
 
-class _FollowingUsersState extends State<FollowingUsers> {
+class _FollowingUsersState extends State<FollowingUsers>
+    with TickerProviderStateMixin {
+  AnimationController animController;
   Stream<dynamic> following;
+  User currentUser;
   @override
   void initState() {
-    following = followingRef
-        .doc(currentUser.uid)
-        .collection("userFollowing")
-        .get()
-        .then((doc) => doc)
-        .asStream();
     super.initState();
+    currentUser = Provider.of<AppProvider>(context, listen: false).currentUser;
+    animController =
+        AnimationController(vsync: this, duration: Duration(seconds: 30))
+          ..repeat();
   }
 
   handleFollowers(id) {
     // put that user on your following collection
 
     followersRef
-        .doc("${currentUser.uid}")
+        .doc("${currentUser.userID}")
         .collection("userFollowers")
         .doc(id)
         .set({});
@@ -51,17 +53,17 @@ class _FollowingUsersState extends State<FollowingUsers> {
     followingRef
         .doc(id)
         .collection("userFollowing")
-        .doc("${currentUser.uid}")
+        .doc("${currentUser.userID}")
         .set({});
     activityFeedRef
         .doc(id)
         .collection("feedItems")
-        .doc("${currentUser.uid}")
+        .doc("${currentUser.userID}")
         .set({
       "type": "follow",
       "ownerId": "$id",
-      "userId": "${currentUser.uid}",
-      "userProfileImg": currentUser.photoURL,
+      "userId": "${currentUser.userID}",
+      "userProfileImg": currentUser.profilePictureURL,
       "timestamp": timestamp
     });
   }
@@ -70,7 +72,7 @@ class _FollowingUsersState extends State<FollowingUsers> {
     // put that user on your following collection
 
     followersRef
-        .doc("${currentUser.uid}")
+        .doc("${currentUser.userID}")
         .collection("userFollowers")
         .doc(id)
         .get()
@@ -81,7 +83,7 @@ class _FollowingUsersState extends State<FollowingUsers> {
     });
     // Add me to users following list
     followingRef
-        .doc("${currentUser.uid}")
+        .doc("${currentUser.userID}")
         .collection("userFollowing")
         .doc(id)
         .get()
@@ -93,7 +95,7 @@ class _FollowingUsersState extends State<FollowingUsers> {
     activityFeedRef
         .doc(id)
         .collection("feedItems")
-        .doc("${currentUser.uid}")
+        .doc("${currentUser.userID}")
         .get()
         .then((doc) {
       if (doc.exists) {
@@ -103,7 +105,7 @@ class _FollowingUsersState extends State<FollowingUsers> {
 
     setState(() {
       following = followingRef
-          .doc(currentUser.uid)
+          .doc("${currentUser.userID}")
           .collection("userFollowing")
           .get()
           .then((doc) => doc)
@@ -114,11 +116,34 @@ class _FollowingUsersState extends State<FollowingUsers> {
   Future<QuerySnapshot> checkifFollowing() async {
     var result = await FirebaseFirestore.instance
         .collection("following")
-        .doc(currentUser.uid)
+        .doc("${currentUser.userID}")
         .collection("userFollowing")
         .get()
         .then((doc) => doc);
     return result;
+  }
+
+  Widget animatedLogo() {
+    final animation = Tween(begin: 0, end: 2 * pi).animate(animController);
+    return AnimatedBuilder(
+        animation: animation,
+        child: Container(
+          color: Colors.red,
+          width: 2,
+          height: 2,
+        ),
+        builder: (context, child) {
+          return Transform.rotate(
+            angle: animation.value,
+            child: child,
+          );
+        });
+  }
+
+  @override
+  void dispose() {
+    animController.dispose();
+    super.dispose();
   }
 
   @override
@@ -126,37 +151,69 @@ class _FollowingUsersState extends State<FollowingUsers> {
     return Container(
       padding: EdgeInsets.zero,
       child: StreamBuilder<QuerySnapshot>(
-        stream: following,
+        stream: followingRef
+            .doc("${currentUser.userID}")
+            .collection("userFollowing")
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Text("Something went wrong");
+            print(snapshot.error);
+            return Text(
+                "Something went wrong getting followings: ${snapshot.error}");
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return GFLoader(
               type: GFLoaderType.circle,
             );
           }
-
-          return ListView(
-              padding: EdgeInsets.zero,
-              children: snapshot.data.docs.map((DocumentSnapshot document) {
-                return GFListTile(
-                  padding: EdgeInsets.zero,
-                  avatar: GFAvatar(
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(1000),
-                        child: CachedNetworkImage(
-                            imageUrl: "${document.data()['userProfileImg']}")),
-                  ),
-                  title: Text(document.data()['userName']),
-                  icon: OutlinedButton(
-                    onPressed: () {
-                      handleUnfollow("${document.data()['userId']}");
+          if (snapshot.hasData) {
+            return ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (context, index) {
+                  return OpenContainer(
+                    transitionType: ContainerTransitionType.fadeThrough,
+                    closedElevation: 0,
+                    closedColor: Colors.transparent,
+                    openBuilder: (context, action) {
+                      return animatedLogo();
                     },
-                    child: Text("Following"),
-                  ),
-                );
-              }).toList());
+                    closedBuilder: (context, action) {
+                      return GFListTile(
+                        padding: EdgeInsets.zero,
+                        avatar: GFAvatar(
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(1000),
+                              child: UniversalPlatform.isWeb
+                                  ? Image(
+                                      image: NetworkImage(
+                                          "${snapshot.data.docs[index].data()['userProfileImg']}"))
+                                  : CachedNetworkImage(
+                                      imageUrl:
+                                          "${snapshot.data.docs[index].data()['userProfileImg']}")),
+                        ),
+                        title:
+                            Text(snapshot.data.docs[index].data()['userName']),
+                        icon: OutlinedButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => ProfileDialog());
+                            // handleUnfollow(
+                            //     "${snapshot.data.docs[index].data()['userId']}");
+                          },
+                          child: Text("Following"),
+                        ),
+                      );
+                    },
+                  );
+                });
+          } else {
+            return Container(
+              height: 0.0,
+              width: 0.0,
+            );
+          }
         },
       ),
     );

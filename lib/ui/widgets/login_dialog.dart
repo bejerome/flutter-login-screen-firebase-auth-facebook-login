@@ -3,12 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login_screen/ui/widgets/google_button.dart';
 
-class AuthDialog extends StatefulWidget {
+class LoginDialog extends StatefulWidget {
   @override
-  _AuthDialogState createState() => _AuthDialogState();
+  _LoginDialogState createState() => _LoginDialogState();
 }
 
-class _AuthDialogState extends State<AuthDialog> {
+class _LoginDialogState extends State<LoginDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -17,6 +17,7 @@ class _AuthDialogState extends State<AuthDialog> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Container(
+            width: MediaQuery.of(context).size.width * 0.5,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,

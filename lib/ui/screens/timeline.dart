@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_screen/constants/app_themes.dart';
+import 'package:flutter_login_screen/model/user.dart';
+import 'package:flutter_login_screen/providers/app_providers.dart';
 import 'package:flutter_login_screen/ui/widgets/campsites_list.dart';
 import 'package:flutter_login_screen/ui/widgets/following_list.dart';
+import 'package:provider/provider.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 final CollectionReference usersRef =
     FirebaseFirestore.instance.collection('users');
@@ -20,7 +24,6 @@ final Reference storageRef = FirebaseStorage.instance.ref();
 final CollectionReference activityFeedRef =
     FirebaseFirestore.instance.collection('feeds');
 
-final currentUser = FirebaseAuth.instance.currentUser;
 final DateTime timestamp = DateTime.now();
 var orientation;
 
@@ -34,9 +37,12 @@ class _TimelineState extends State<Timeline> {
   bool initialized = false;
   bool error = false;
   bool isFollowing = false;
+  User currentUser;
+
   // FireStoreDatabase dB = new FireStoreDatabase();
   @override
   void initState() {
+    currentUser = Provider.of<AppProvider>(context, listen: false).currentUser;
     super.initState();
   }
 
@@ -46,7 +52,7 @@ class _TimelineState extends State<Timeline> {
       isFollowing = true;
     });
     followersRef
-        .doc("${currentUser.uid}")
+        .doc("${currentUser.userID}")
         .collection("userFollowers")
         .doc(id)
         .set({});
@@ -54,17 +60,17 @@ class _TimelineState extends State<Timeline> {
     followingRef
         .doc(id)
         .collection("userFollowing")
-        .doc("${currentUser.uid}")
+        .doc("${currentUser.userID}")
         .set({});
     activityFeedRef
         .doc(id)
         .collection("feedItems")
-        .doc("${currentUser.uid}")
+        .doc("${currentUser.userID}")
         .set({
       "type": "follow",
       "ownerId": "$id",
-      "userId": "${currentUser.uid}",
-      "userProfileImg": currentUser.photoURL,
+      "userId": "${currentUser.userID}",
+      "userProfileImg": currentUser.profilePictureURL,
       "timestamp": timestamp
     });
   }
@@ -75,7 +81,7 @@ class _TimelineState extends State<Timeline> {
       isFollowing = false;
     });
     followersRef
-        .doc("${currentUser.uid}")
+        .doc("${currentUser.userID}")
         .collection("userFollowers")
         .doc(id)
         .get()
@@ -88,7 +94,7 @@ class _TimelineState extends State<Timeline> {
     followingRef
         .doc(id)
         .collection("userFollowing")
-        .doc("${currentUser.uid}")
+        .doc("${currentUser.userID}")
         .get()
         .then((doc) {
       if (doc.exists) {
@@ -98,7 +104,7 @@ class _TimelineState extends State<Timeline> {
     activityFeedRef
         .doc(id)
         .collection("feedItems")
-        .doc("${currentUser.uid}")
+        .doc("${currentUser.userID}")
         .get()
         .then((doc) {
       if (doc.exists) {
@@ -127,11 +133,10 @@ class _TimelineState extends State<Timeline> {
 
   @override
   Widget build(context) {
-    orientation = MediaQuery.of(context).orientation;
     return Scaffold(
         backgroundColor: AppThemes.lightTheme.backgroundColor,
-        body: orientation == Orientation.portrait
-            ? timelinePortrait()
-            : landscapePortrait());
+        body: (UniversalPlatform.isWeb || UniversalPlatform.isMacOS)
+            ? landscapePortrait()
+            : timelinePortrait());
   }
 }

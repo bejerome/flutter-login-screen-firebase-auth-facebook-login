@@ -9,6 +9,7 @@ import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/constants/app_themes.dart';
 import 'package:flutter_login_screen/model/user.dart';
 import 'package:flutter_login_screen/ui/widgets/getwidget.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class MenuText extends StatelessWidget {
   final String title;
@@ -74,7 +75,6 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
       : super(key: key);
 
   Widget build(BuildContext context) {
-    var orientation = MediaQuery.of(context).orientation;
     TextEditingController searchController = TextEditingController();
     return Container(
       color: Colors.transparent,
@@ -108,9 +108,11 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
             return Container(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(1000.0),
-                child: CachedNetworkImage(
-                  imageUrl: "${user.profilePictureURL}",
-                ),
+                child: UniversalPlatform.isWeb
+                    ? Image(image: NetworkImage("${user.profilePictureURL}"))
+                    : CachedNetworkImage(
+                        imageUrl: "${user.profilePictureURL}",
+                      ),
               ),
             );
           },
@@ -124,9 +126,9 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     Stack(children: [
                       Padding(
-                        padding: orientation == Orientation.portrait
-                            ? const EdgeInsets.only(top: 100.0)
-                            : const EdgeInsets.only(top: 0.0),
+                        padding: UniversalPlatform.isWeb
+                            ? const EdgeInsets.only(top: 0.0)
+                            : const EdgeInsets.only(top: 100.0),
                         child: GFAvatar(
                             radius: 70,
                             backgroundColor:
@@ -195,10 +197,11 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                       height: 0,
                     ),
                     Container(
-                      padding: orientation == Orientation.portrait
-                          ? EdgeInsets.only(left: 0.0, right: 0.0, bottom: 1)
-                          : EdgeInsets.only(
-                              left: 100.0, right: 100.0, bottom: 15),
+                      padding: (UniversalPlatform.isWeb ||
+                              UniversalPlatform.isMacOS)
+                          ? EdgeInsets.only(
+                              left: 100.0, right: 100.0, bottom: 15)
+                          : EdgeInsets.only(left: 0.0, right: 0.0, bottom: 1),
                       child: Column(
                         children: [
                           MenuText(
@@ -230,9 +233,10 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                             },
                           ),
                           Padding(
-                            padding: orientation == Orientation.portrait
-                                ? EdgeInsets.only(top: 50.0)
-                                : EdgeInsets.only(top: 0.0),
+                            padding: (UniversalPlatform.isWeb ||
+                                    UniversalPlatform.isMacOS)
+                                ? EdgeInsets.only(top: 0.0)
+                                : EdgeInsets.only(top: 50.0),
                             // change to 0 from landscape, 50 portrait
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -332,7 +336,7 @@ class CustomFollowingsBadge extends StatelessWidget {
         future: followersRef,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Text("Something went wrong");
+            return Text("Something went wrong Building Following Badge");
           }
 
           if (snapshot.connectionState == ConnectionState.done) {

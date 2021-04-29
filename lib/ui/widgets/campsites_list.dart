@@ -37,7 +37,7 @@ class _CampSiteState extends State<CampSiteList> {
         stream: campsites,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Text("Something went wrong");
+            return Text("Something went wrong building campsite list");
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return GFLoader(

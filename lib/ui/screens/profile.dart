@@ -3,9 +3,6 @@ import 'package:flutter_login_screen/constants/app_themes.dart';
 import 'package:flutter_login_screen/model/user.dart';
 import 'package:flutter_login_screen/services/helper.dart';
 
-import 'package:flutter_login_screen/ui/widgets/header.dart';
-
-import 'package:flutter_login_screen/ui/widgets/getwidget.dart';
 // final usersRef = FirebaseFirestore.instance.collection('users');
 
 class Profile extends StatefulWidget {

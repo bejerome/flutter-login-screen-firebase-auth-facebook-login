@@ -32,13 +32,13 @@
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
        <!-- The core Firebase JS SDK is always required and must be listed first -->
-       <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
-       <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-auth.js"></script>
-       <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-storage.js"></script>
+       <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-firestore.js"></script>
+       <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
+       <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-storage.js"></script>
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-analytics.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-analytics.js"></script>
 <script src="web/firebase_init.js"></script>
 </head>
 <body>
@@ -49,6 +49,15 @@
       });
     }
   </script>
+  <script type="text/javascript">
+    let useHtml = 'hml'
+    if(useHtml) {
+      window.flutterWebRenderer = "html";
+    } else {
+      window.flutterWebRenderer = "canvaskit";
+    }
+  </script>
+  
 
 <script src="main.dart.js" type="application/javascript"></script>
 </body>
